@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" ng-app="cmdb">
+  <head>
+    <meta charset="utf-8">
+    <title>生产厂商管理</title>
+
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="ico" href="static/favicon.ico">
+    <!--
+    <script src="static/semantic/semantic.js">
+    -->
+    <script src="http://apps.bdimg.com/libs/angular.js/1.3.9/angular.min.js"></script>
+    <script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+  </head>
+  <body>
+    <div ng-controller="ManageMfrsController">
+      <div class="panel panel-default">                                      
+      <div class="panel-body">
+      <table class="table table-hover table-bordered table-striped"> 
+        <thead>
+          <tr>
+            <th colspan="5">
+              <div class="btn btn-primary", ng-click="selectAll()">
+                全选
+              </div>
+              <div class="btn btn-primary", ng-click="open()">
+                添加
+              </div>
+              <div class="btn btn-primary", ng-click="edit()">
+                修改
+              </div>
+              <div class="btn btn-primary", ng-click="delete('sm')">
+                删除
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th>ID</th>
+            <th>厂商名称</th>
+            <th>修改时间</th>
+            <th>创建时间</th>
+            <th>备注</th>
+          </tr>  
+          <tr><th colspan="5">
+              <input type="text" ng-model="search" class="form-control" placeholder="search ...">
+          </th></tr>
+      </thead>
+        <tbody>
+          <tr ng-repeat="mfr in mfrs|filter:search" ng-click="select(mfr)" ng-class="{true: 'info', false: ''}[mfr.selected]">
+            <td>{{mfr.sid}}</td>
+            <td>{{mfr.name}}</td>
+            <td>{{mfr.u_date}}</td>
+            <td>{{mfr.c_date}}</td>
+            <td>{{mfr.notes}}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="5">
+              <div class="btn btn-primary", ng-click="selectAll()">
+                全选
+              </div>
+              <div class="btn btn-primary", ng-click="open()">
+                添加
+              </div>
+              <div class="btn btn-primary", ng-click="edit()">
+                修改
+              </div>
+              <div class="btn btn-primary", ng-click="delete('sm')">
+                删除
+              </div>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+      <center>
+              <uib-pagination ng-change="pageChange()" total-items="count" items-per-page="{{itemsPerPage}}" ng-model="selPageNum" max-size="maxSize" class="pagination-sm" boundary-links="true"></uib-pagination>
+              <!--
+              <input type="text" style="width:{{ widthPx }}px" ng-model="selPageNum" ng-keypress="pageChange($event)"  maxlength="{{ pageNumLength }}" ng-change="checkNum()">
+              <label>/{{ totalPage }}</label>
+              -->
+      </center>
+      </div>
+      </div>
+    </div>
+      <div>
+        <script type="text/ng-template" id="addMfrsModal.html">
+          <div class="modal-header">
+            <h3 class="modal-title">添加生产厂商</h3>
+          </div>
+          <form class="form-horizontal">
+            <div class="modal-body">
+              <div ng-if="alerted">
+                <div class="alert alert-{{alert.type}} alert-dismissible" ng-repeat="alert in alerts" ng-show="closeable">
+                  <button type="button" class="close" ng-click="closelabel()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
+                  {{alert.msg}}
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputMfrs" class="col-sm-2 control-label">生产厂商:</label>
+                <div class="col-sm-4">
+                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="DELL">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="textareaNotes" class="col-sm-2 control-label">备注:</label>
+                <div class="col-sm-10">
+                  <textarea ng-model="notes" class="form-control" id="textareaNotes" placeholder="备注"></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button ng-click="submit('false')" class="btn btn-primary">保存</button>
+                <button ng-click="submit('true')" class="btn btn-primary">保存并继续添加</button>
+                <button ng-click="cancel()" class="btn btn-primary">取消</button>
+              </div>
+            </div>
+          </form>
+        </script>
+      </div>
+    </div>
+      <div>
+        <script type="text/ng-template" id="success.html">
+          <div class="modal-header">
+            <h3 class="modal-title">成功</h3>
+          </div>
+            <div class="modal-body">
+              <b>{{msg}}</b>
+            </div>
+            <div class="modal-footer">
+              <button ng-click="close()" class="btn btn-primary">确定</button>
+            </div>
+          </form>
+        </script>
+      </div>
+      <div>
+        <script type="text/ng-template" id="deleteMessages.html">
+          <div class="modal-header">
+            <h3 class="modal-title">确认</h3>
+          </div>
+            <div class="modal-body">
+              <b>{{msg}}</b>
+            </div>
+            <div class="modal-footer">
+              <button ng-click="ok()" class="btn btn-primary">确定</button>
+              <button ng-click="cancel()" class="btn btn-primary">取消</button>
+            </div>
+          </form>
+        </script>
+      </div>
+      <div>
+        <script type="text/ng-template" id="info.html">
+          <div class="modal-header">
+            <h3 class="modal-title">{{title}}</h3>
+          </div>
+            <div class="modal-body">
+              <b>{{msg}}</b>
+            </div>
+            <div class="modal-footer">
+              <button ng-click="close()" class="btn btn-primary">确定</button>
+            </div>
+          </form>
+        </script>
+      </div>
+      <div>
+        <script type="text/ng-template" id="editMfrsModal.html">
+          <div class="modal-header">
+            <h3 class="modal-title">修改生产厂商</h3>
+          </div>
+          <form class="form-horizontal">
+            <div class="modal-body">
+              <div ng-if="alerted">
+                <div class="alert alert-{{alert.type}} alert-dismissible" ng-repeat="alert in alerts" ng-show="closeable">
+                  <button type="button" class="close" ng-click="closelabel()">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
+                  {{alert.msg}}
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputMfrs" class="col-sm-2 control-label">生产厂商:</label>
+                <div class="col-sm-4">
+                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="DELL">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="textareaNotes" class="col-sm-2 control-label">备注:</label>
+                <div class="col-sm-10">
+                  <textarea ng-model="notes" class="form-control" id="textareaNotes" placeholder="备注"></textarea>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button ng-click="submit()" class="btn btn-primary">保存</button>
+                <button ng-click="cancel()" class="btn btn-primary">取消</button>
+              </div>
+            </div>
+          </form>
+        </script>
+      </div>
+  </body>
+</html>
