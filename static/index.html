@@ -38,7 +38,7 @@
             </th>
           </tr>
           <tr>
-            <th>厂商名称</th>
+            <th>关键字</th>
             <th>修改时间</th>
             <th>创建时间</th>
             <th>操作人</th>
@@ -50,7 +50,7 @@
       </thead>
         <tbody>
           <tr ng-repeat="mfr in mfrs|filter:search" ng-click="select(mfr)" ng-class="{true: 'info', false: ''}[mfr.selected]">
-            <td>{{mfr.name}}</td>
+            <td>{{mfr.key}}</td>
             <td>{{mfr.u_date}}</td>
             <td>{{mfr.c_date}}</td>
             <td>{{mfr.opter}}</td>
@@ -89,7 +89,7 @@
       <div>
         <script type="text/ng-template" id="addMfrsModal.html">
           <div class="modal-header">
-            <h3 class="modal-title">添加生产厂商</h3>
+            <h3 class="modal-title">添加关键字</h3>
           </div>
           <form class="form-horizontal">
             <div class="modal-body">
@@ -103,9 +103,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputMfrs" class="col-sm-2 control-label">生产厂商:</label>
+                <label for="inputMfrs" class="col-sm-2 control-label">关键字:</label>
                 <div class="col-sm-4">
-                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="DELL">
+                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="rm -rf">
                 </div>
               </div>
               <div class="form-group">
@@ -170,7 +170,7 @@
       <div>
         <script type="text/ng-template" id="editMfrsModal.html">
           <div class="modal-header">
-            <h3 class="modal-title">修改生产厂商</h3>
+            <h3 class="modal-title">修改关键字</h3>
           </div>
           <form class="form-horizontal">
             <div class="modal-body">
@@ -184,9 +184,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="inputMfrs" class="col-sm-2 control-label">生产厂商:</label>
+                <label for="inputMfrs" class="col-sm-2 control-label">关键字:</label>
                 <div class="col-sm-4">
-                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="DELL">
+                  <input type="text" ng-model="name" class="form-control" id="inputMfrs" placeholder="rm -rf">
                 </div>
               </div>
               <div class="form-group">
