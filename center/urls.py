@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^roles/$', 'roles.views.index'),
+    url(r'^key/$', 'roles.views.keycheck'),
 ]

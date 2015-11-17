@@ -2,7 +2,7 @@ from django.shortcuts import render
 import json
 from django.http import HttpResponse
 # Create your views here.
-from roles.models import roles
+from roles.models import roles,keycode
 
 re_dict = {}
 
@@ -57,6 +57,68 @@ def index(request):
             result['id'] = i.id
             result['ip'] = i.ip
             result['name'] = i.name
+            result['content'] = i.content
+            allresult.append(result)
+        re_dict = {'result':allresult,
+                   'code':200}
+        return HttpResponse(json.dumps(re_dict))
+
+
+
+
+
+
+def keycheck(request):
+    opt = request.GET['opt']
+    # if opt == 'select':
+    #     name = request.GET['name']
+    #     roles_data = roles.objects.get(name = name)
+    #     result = {}
+    #     result['id'] = roles_data.id
+    #     result['ip'] = roles_data.ip
+    #     result['name'] = roles_data.name
+    #     result['content'] = roles_data.content
+    #     re_dict = {'result':result,
+    #                'code':200}
+    #     return HttpResponse(json.dumps(re_dict))
+
+    #     #re_dict = {'result':roles_data,
+    #     #           'code':200}
+    #     #return HttpResponse(json.dumps(re_dict))
+    if opt == 'update':
+        pk = request.GET['pk']
+        key = request.GET['key']
+        # ip = request.GET['ip']
+        content = request.GET['content']
+        keycode.objects.filter(pk=pk).update(key = key,ip = ip,content = content)
+        re_dict = {'result':'update ok',
+                   'code':200}
+        return HttpResponse(json.dumps(re_dict))
+    elif opt == 'insert':
+        key = request.GET['key']
+        # ip = request.GET['ip']
+        content = request.GET['content']
+        keycode.objects.create(key = key,content = content)
+        #DB = roles(name = name,ip = ip,content = content)
+        #DB.save()
+        re_dict = {'result':'insert ok',
+                   'code':200}
+        return HttpResponse(json.dumps(re_dict))
+    elif opt == 'delete':
+        pk = request.GET['pk']
+        DB = keycode.objects.get(pk = pk)
+        DB.delete()
+        re_dict = {'result':'delete ok',
+                   'code':200}
+        return HttpResponse(json.dumps(re_dict))
+    elif opt == 'selectall':
+        list = keycode.objects.all()
+        allresult = []
+        for i in list:
+            result = {}
+            result['id'] = i.id
+            # result['ip'] = i.ip
+            result['key'] = i.key
             result['content'] = i.content
             allresult.append(result)
         re_dict = {'result':allresult,

@@ -9,3 +9,13 @@ class roles(models.Model) :
 
         def __unicode__(self) :
             return ('%s %s %s %s %s\n') % (self.id,self.name,self.ip,self.date_time,self.content)
+
+
+
+class keycode(models.Model) :
+        key = models.CharField(max_length = 100,unique=True)   
+        date_time = models.DateTimeField(auto_now_add = True)
+        content = models.TextField(blank = True, null = True)
+
+        def __unicode__(self) :
+            return ('%s %s %s %s\n') % (self.id,self.key,self.date_time,self.content)
