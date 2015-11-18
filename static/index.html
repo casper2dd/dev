@@ -25,7 +25,10 @@
   <!-- Default panel contents -->
   <div class="panel-heading">关键字</div>
   <div class="panel-body">
-    <p>代码审核,需要过滤文件里的关键字,在这里配置</p>
+    <p class="text-success">代码审核,需要过滤文件里的关键字,在这里配置</p>
+    <p class="text-success">如果审核人不在默认选项中，可以增加</p>
+    <p class="text-success">备注请详细描述</p>
+    <p class="text-danger">rm 等危险操作请特别注意</p>
   </div>
 
   <!-- Table -->
@@ -59,11 +62,11 @@
         <div class="modal-body">
                 <div class="form-group">
       <label>关键字:</label>
-      <input type="text" ng-model="key" class="form-control">
+      <input type="text" ng-model="key" class="form-control" placeholder="rm *">
       </div>
       <div class="form-group">
       <label>备注:</label>
-      <input type="text" ng-model="content" class="form-control">
+      <input type="text" ng-model="content" class="form-control" placeholder="使用情景">
       </div>
         </div>
         <div class="modal-footer">
@@ -72,7 +75,7 @@
         </div>
     </script>
 
-    <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
+    <button type="button" class="btn btn-primary col-md-offset-10" ng-click="open()">增加关键字</button>
 <!--     <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
     <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
     <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button> -->

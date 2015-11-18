@@ -1,8 +1,19 @@
-codecheck.controller('getkeys', function($scope, $http) {
-    var url = "http://192.168.70.131:8888/key/?opt=selectall"
+// codecheck.controller('getkeys', function($scope, $http) {
+//     var url = "http://192.168.70.131:8888/key/?opt=selectall"
+//     // var url = "http://192.168.70.131:8888/key/"
+//     // var postData = {opt:'selectall'};
 
-    $http.get(url)
-    .success(function(response) {$scope.keys = response.result;});
+//     $http.get(url)
+//     .success(function(response) {$scope.keys = response.result;});
+// });
+
+codecheck.controller('getkeys', function($scope, $uibModal, getkeyservice) {
+    getkeyservice.getkey()
+        .then(function(data) {
+            console.log(data);
+            $scope.keys = data.data.result;
+
+        });
 });
 
 codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
@@ -17,13 +28,13 @@ codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
       animation: $scope.animationsEnabled,
       templateUrl: 'myModalContent.html',
       controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-           // return $scope.items;
-           return 'ok';
-        }
-      }
+      size: size
+      // resolve: {
+      //   items: function () {
+      //      // return $scope.items;
+      //      return 'ok';
+      //   }
+      // }
     });
 
     // modalInstance.result.then(function (selectedItem) {
@@ -42,15 +53,22 @@ codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$http) {
 
-  $scope.items = items;
-  $scope.selected = {
-    item: $scope.items[0]
-  };
+  // $scope.items = items;
+  // $scope.selected = {
+  //   item: $scope.items[0]
+  // };
 
   $scope.ok = function () {
-    $uibModalInstance.close($scope.selected.item);
+     var key = $scope.key;
+     var content = $scope.content;
+     var url = "http://192.168.70.131:8888/key/?opt=insert"+"&key="+key+"&content="+content;
+     $http.get(url)
+     .success(function(response) {$scope.keys = response.result;console.log($scope.keys);});
+     
+
+     $uibModalInstance.close();
   };
 
   $scope.cancel = function () {

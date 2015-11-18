@@ -14,4 +14,4 @@
 //});
 
 // var cmdb = angular.module('cmdb', ['cmdb.services', 'ui.bootstrap'])
-var codecheck = angular.module('myApp', ['ui.bootstrap'])
+var codecheck = angular.module('myApp', ['codecheck.services','ui.bootstrap'])

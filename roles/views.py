@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse
 # Create your views here.
 from roles.models import roles,keycode
+from django.views.decorators.csrf import csrf_protect
 
 re_dict = {}
 
@@ -67,7 +68,7 @@ def index(request):
 
 
 
-
+# @csrf_protect
 def keycheck(request):
     opt = request.GET['opt']
     # if opt == 'select':
