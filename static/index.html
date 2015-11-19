@@ -46,7 +46,7 @@
       <tr ng-repeat="key in keys">
 <th><div class="checkbox">
   <label>
-    <input type="checkbox" ng-model="ids" value="{{key.id}}">
+    <input type="checkbox" ng-model="ids.{{key.id}}" ng-true-value="'YES'" ng-false-value="'NO'">
   </label>
 </div></th>
 <td>{{key.key}}</td>
