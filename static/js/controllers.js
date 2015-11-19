@@ -1,24 +1,34 @@
-// codecheck.controller('getkeys', function($scope, $http) {
-//     var url = "http://192.168.70.131:8888/key/?opt=selectall"
-//     // var url = "http://192.168.70.131:8888/key/"
-//     // var postData = {opt:'selectall'};
-
-//     $http.get(url)
-//     .success(function(response) {$scope.keys = response.result;});
-// });
 
 codecheck.controller('getkeys', function($scope, $uibModal, getkeyservice) {
     getkeyservice.getkey()
         .then(function(data) {
-            console.log(data);
-            $scope.keys = data.data.result;
-
+            // database = data.data.result;
+            // result = database;
+            // var list = new Array();
+            // for(var i in result) {
+            //     delete result[i].id;
+            //     list.push(result[i]);
+            // };
+            // console.log(result);
+            // console.log(list);
+            // console.log(database);
+             $scope.keys = data.data.result;
         });
+
+    $scope.animationsEnabled = true;
+    $scope.open = function (size) {
+
+    var modalInstance = $uibModal.open({
+      animation: $scope.animationsEnabled,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size
+    });
+    };
 });
 
 codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
 
-  // $scope.items = ['item1', 'item2', 'item3'];
 
   $scope.animationsEnabled = true;
 
@@ -29,45 +39,30 @@ codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
       templateUrl: 'myModalContent.html',
       controller: 'ModalInstanceCtrl',
       size: size
-      // resolve: {
-      //   items: function () {
-      //      // return $scope.items;
-      //      return 'ok';
-      //   }
-      // }
     });
-
-    // modalInstance.result.then(function (selectedItem) {
-    //   $scope.selected = selectedItem;
-    // }, function () {
-    //   $log.info('Modal dismissed at: ' + new Date());
-    // });
   };
-
-  // $scope.toggleAnimation = function () {
-  //   $scope.animationsEnabled = !$scope.animationsEnabled;
-  // };
 
 });
 
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$http) {
+codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, Insertkeyservice, getkeyservice) {
 
-  // $scope.items = items;
-  // $scope.selected = {
-  //   item: $scope.items[0]
-  // };
 
   $scope.ok = function () {
      var key = $scope.key;
      var content = $scope.content;
-     var url = "http://192.168.70.131:8888/key/?opt=insert"+"&key="+key+"&content="+content;
-     $http.get(url)
-     .success(function(response) {$scope.keys = response.result;console.log($scope.keys);});
-     
+     Insertkeyservice.insertkey(key,content)
+     .then(function(data) {
+            alert(data.data.result);window.location.reload();
+        });
 
+     // getkeyservice.getkey()
+     //    .then(function(data) {
+     //      alert('test');
+     //      $scope.keys = data.data.result;
+     //    });
      $uibModalInstance.close();
   };
 

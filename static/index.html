@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" ng-app="myApp">
+<html lang="en" ng-app="myApp" ng-controller="getkeys">
   <head>
     <meta charset="utf-8">
     <title>代码审核</title>
@@ -32,7 +32,7 @@
   </div>
 
   <!-- Table -->
-<div  ng-controller="getkeys">
+<div>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -44,7 +44,11 @@
     </thead>
     <tbody>
       <tr ng-repeat="key in keys">
-<th>{{key.id}}</th>
+<th><div class="checkbox">
+  <label>
+    <input type="checkbox" ng-model="ids" value="{{key.id}}">
+  </label>
+</div></th>
 <td>{{key.key}}</td>
 <td>liancheng</td>
 <td>{{key.content}}</td>
@@ -54,7 +58,8 @@
 </div>
 </div>
 
-<div ng-controller="ModalDemoCtrl">
+<!-- <div ng-controller="ModalDemoCtrl"> -->
+<div>
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
             <h3 class="modal-title">增加关键字</h3>

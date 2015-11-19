@@ -27,6 +27,27 @@ codecheck.factory('getkeyservice', function($q, $http) {
     };
 });
 
+codecheck.factory('Insertkeyservice', function($q, $http) {
+    
+    var d = $q.defer();
+  
+    return {
+        insertkey: function(key, content, success, error) {
+            var url = "http://192.168.70.131:8888/key/?opt=insert"+"&key="+key+"&content="+content;
+            var promise = $http.get(url);
+
+            promise.success(function(data, status) {
+                d.resolve(data);
+            });
+
+            promise.error(function(data, status) {
+                d.reject(data);
+            });
+            return promise
+        }
+    };
+});
+
 // //cmdb.factory('GetServersSerivice', [function($q, $http){
 // //    var service = {
 // //        getServers: function() {
