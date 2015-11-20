@@ -68,9 +68,9 @@ def index(request):
 
 
 
-# @csrf_protect
+@csrf_protect
 def keycheck(request):
-    opt = request.GET['opt']
+    opt = request.POST['opt']
     # if opt == 'select':
     #     name = request.GET['name']
     #     roles_data = roles.objects.get(name = name)

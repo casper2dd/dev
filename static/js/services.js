@@ -3,29 +3,65 @@ var codecheck = angular.module('codecheck.services', [])
 
 //codecheck.factory('getkeys', function($q, $http) {
 
-codecheck.factory('getkeyservice', function($q, $http) {
-    var url = "http://192.168.70.131:8888/key/?opt=selectall";
-    var d = $q.defer();
-    var promise = $http.get(url);
+// codecheck.factory('getkeyservice', function($q, $http) {
+//     // var url = "http://192.168.70.131:8888/key/?opt=selectall";
+//     var d = $q.defer();
+//     var promise = $http.get(url);
+    
 
-    promise.success(function(data, status) {
-        d.resolve(data);
-        //var res = data 
-    });
 
-    promise.error(function(data, status) {
-        //console.log(data);
-        d.reject(data);
-    });
+//     promise.success(function(data, status) {
+//         d.resolve(data);
+//         //var res = data 
+//     });
+
+//     promise.error(function(data, status) {
+//         //console.log(data);
+//         d.reject(data);
+//     });
 
     
+//     return {
+//         getkey: function() {
+//             return promise
+//             //return [{'st':'134'}, {'st':'234'}];
+//         }
+//     };
+// });
+
+
+
+codecheck.factory('getkeyservicepost', function($q, $http) {
+    // var url = "http://192.168.70.131:8888/key/?opt=selectall";
+    // var d = $q.defer();
+    // var promise = $http.get(url);
+    var url = "http://192.168.70.131:8888/key/"
+    // var header = headers : {
+    //     "x-csrftoken" : $cookies.csrftoken
+    // }
+    
+    
     return {
-        getkey: function() {
+        postMfrs: function(data, success, error) {
+            var promise = $http.post("http://192.168.70.131:8888/key/", data,{
+    headers : {
+        "x-csrftoken" : $cookies.csrftoken
+    }});
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
             return promise
-            //return [{'st':'134'}, {'st':'234'}];
         }
     };
 });
+
 
 codecheck.factory('Insertkeyservice', function($q, $http) {
     

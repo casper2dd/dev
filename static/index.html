@@ -30,7 +30,10 @@
     <p class="text-success">备注请详细描述</p>
     <p class="text-danger">rm 等危险操作请特别注意</p>
   </div>
-
+<pre>{{choseArr}}</pre>
+<pre>{{ids}}</pre>
+全选: <input type="checkbox" ng-model="master" ng-click="all(master)">
+<!-- <input type="checkbox" ng-model="master" ng-click="all(master,ids)"> -->
   <!-- Table -->
 <div>
   <table class="table table-hover">
@@ -46,7 +49,8 @@
       <tr ng-repeat="key in keys">
 <th><div class="checkbox">
   <label>
-    <input type="checkbox" ng-model="ids.{{key.id}}" ng-true-value="'YES'" ng-false-value="'NO'">
+    <input type="checkbox" id="{{key.id}}" ng-checked="master" ng-click="chk(key.id,x)" ng-model="x">
+    <!-- <input type="checkbox" id="{{key.id}}" ng-true-value="YES" ng-false-value="NO" ng-model="key.id"> -->
   </label>
 </div></th>
 <td>{{key.key}}</td>
@@ -57,7 +61,7 @@
 </table>
 </div>
 </div>
-
+<!-- <div><p>{{ids}}</p></div> -->
 <!-- <div ng-controller="ModalDemoCtrl"> -->
 <div>
     <script type="text/ng-template" id="myModalContent.html">
@@ -79,8 +83,8 @@
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
     </script>
-
-    <button type="button" class="btn btn-primary col-md-offset-10" ng-click="open()">增加关键字</button>
+    <button type="button" class="btn btn-danger col-md-offset-1" ng-click="delete()">删除</button>
+    <button type="button" class="btn btn-primary col-md-offset-8" ng-click="open()">增加关键字</button>
 <!--     <button type="button" class="btn btn-default" ng-click="open('lg')">Large modal</button>
     <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
     <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button> -->
