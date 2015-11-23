@@ -3,6 +3,8 @@ import json
 from django.http import HttpResponse
 # Create your views here.
 from roles.models import roles,keycode
+from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
 
 re_dict = {}
@@ -65,12 +67,26 @@ def index(request):
         return HttpResponse(json.dumps(re_dict))
 
 
+@csrf_exempt
+def format_request(request):
+    if not request.POST and request.META['CONTENT_LENGTH']:
+        server_json = request.META
+        length = int(server_json['CONTENT_LENGTH'])
+        postjson = json.loads(server_json['wsgi.input'].read(length))
+    elif not request.POST:
+        postjson = request.GET
+    else:
+        postjson = request.POST
+    return postjson
 
 
-
-@csrf_protect
+@csrf_exempt
 def keycheck(request):
-    opt = request.POST['opt']
+    data = format_request(request)
+    # server_json = request.META
+    # length = int(server_json['CONTENT_LENGTH'])
+    # postjson = json.loads(server_json['wsgi.input'].read(length))
+    opt = data['opt']
     # if opt == 'select':
     #     name = request.GET['name']
     #     roles_data = roles.objects.get(name = name)
@@ -87,18 +103,18 @@ def keycheck(request):
     #     #           'code':200}
     #     #return HttpResponse(json.dumps(re_dict))
     if opt == 'update':
-        pk = request.GET['pk']
-        key = request.GET['key']
+        pk = data['pk']
+        key = data['key']
         # ip = request.GET['ip']
-        content = request.GET['content']
+        content = data['content']
         keycode.objects.filter(pk=pk).update(key = key,ip = ip,content = content)
         re_dict = {'result':'update ok',
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
     elif opt == 'insert':
-        key = request.GET['key']
+        key = data['key']
         # ip = request.GET['ip']
-        content = request.GET['content']
+        content = data['content']
         keycode.objects.create(key = key,content = content)
         #DB = roles(name = name,ip = ip,content = content)
         #DB.save()
@@ -106,7 +122,7 @@ def keycheck(request):
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
     elif opt == 'delete':
-        pk = request.GET['pk']
+        pk = data['pk']
         DB = keycode.objects.get(pk = pk)
         DB.delete()
         re_dict = {'result':'delete ok',

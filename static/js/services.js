@@ -43,10 +43,7 @@ codecheck.factory('getkeyservicepost', function($q, $http) {
     
     return {
         postMfrs: function(data, success, error) {
-            var promise = $http.post("http://192.168.70.131:8888/key/", data,{
-    headers : {
-        "x-csrftoken" : $cookies.csrftoken
-    }});
+            var promise = $http.post(url, data);
 
             promise.success(function(response) {
                 //d.resolve(response)
