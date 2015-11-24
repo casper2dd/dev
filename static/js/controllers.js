@@ -1,12 +1,13 @@
-codecheck.controller('getkeys', function($scope, $uibModal,getkeyservicepost) {
+codecheck.controller('getkeys', function($scope, $uibModal,keyservice) {
   var data = {'opt': "selectall"};
     // getkeyservice.getkey()
     //     .then(function(data) {
     //          $scope.keys = data.data.result;
     //     });
 
-    getkeyservicepost.postMfrs(data)
+    keyservice.getkeys(data)
         .then(function(data) {
+             
              $scope.keys = data.data.result;
         });
 
@@ -21,65 +22,125 @@ codecheck.controller('getkeys', function($scope, $uibModal,getkeyservicepost) {
     });
     };
 
-    $scope.ids = new Array();
-    for(var i in $scope.keys) {
-       $scope.ids.push($scope.keys[i].id);
-     };
-    $scope.choseArr=[];
-    var flag="";
-    var str="";
-    $scope.x=false;
+    $scope.selected = [];
+    var updateSelected = function (action, id) {
+        if (action == 'add' && $scope.selected.indexOf(id) == -1) $scope.selected.push(id);
+        if (action == 'remove' && $scope.selected.indexOf(id) != -1) $scope.selected.splice($scope.selected.indexOf(id), 1);
+    }
 
-    // $scope.all= function (master,v) {//全选
-      $scope.all= function (master) {//全选
-            if(master==true){
-                $scope.x=true;
-                alert($scope.ids);
-                $scope.choseArr=$scope.ids;
-                flag="a";
-            }else{
-                $scope.x=false;
-                $scope.choseArr=[];
-            }
+    $scope.updateSelection = function ($event, id) {
+        var checkbox = $event.target;
+        var action = (checkbox.checked ? 'add' : 'remove');
+        updateSelected(action, id);
+    };
 
-            
+    $scope.selectAll = function ($event) {
+        var checkbox = $event.target;
+        var action = (checkbox.checked ? 'add' : 'remove');
+        for (var i = 0; i < $scope.keys.length; i++) {
+            var entity = $scope.keys[i];
+            updateSelected(action, entity.id);
+        }
+    };
 
-        };
-    $scope.chk= function (z,x) {//单选或者多选
-            if(flag=="a") {//在全选的基础上操作
-                str = $scope.choseArr.join(",") + ",";
-            }
-            if (x == true) {//选中
-                str = str + z + ",";
-            } else {
-                str = str.replace(z + ",", "");//取消选中
-            }
+    $scope.getSelectedClass = function (id) {
+        return $scope.isSelected(id) ? 'selected' : '';
+    };
 
-            $scope.choseArr=(str.substr(0,str.length-1)).split(",");
+    $scope.isSelected = function (id) {
+        return $scope.selected.indexOf(id) >= 0;
+    };
 
-        };
+    $scope.delete = function () {// 操作CURD
 
-
-    $scope.delete= function () {// 操作CURD
-
-            if($scope.choseArr[0]==""||$scope.choseArr.length==0){//没有选择一个的时候提示
+            if($scope.selected[0]==""||$scope.selected.length==0){//没有选择一个的时候提示
                 alert("请至少选中一条数据在操作！")
                 return;
             };
 
-            for(var i=0;i<$scope.choseArr.length;i++){
+            for(var i=0;i<$scope.selected.length;i++){
                 //alert($scope.choseArr[i]);
-                console.log($scope.choseArr[i]);//遍历选中的id
+                console.log($scope.selected[i]);//遍历选中的id
+                var data = {'opt': 'delete','pk': $scope.selected[i]};
+                keyservice.deletekey(data)
+               .then(function(data) {
+                    alert(data.data.result);window.location.reload();
+               });
             }
 
 
 
         };
 
+}); 
+
+    //something extra I couldn't resist adding :)
+    // $scope.isSelectedAll = function () {
+    //     return $scope.selected.length === $scope.keys.length;
+    // };
 
 
 
-});
+
+    // $scope.ids = new Array();
+    // for(var i in $scope.keys) {
+    //    $scope.ids.push($scope.keys[i].id);
+    //  };
+    // $scope.choseArr=[];
+    // var flag="";
+    // var str="";
+    // $scope.x=false;
+
+    // // $scope.all= function (master,v) {//全选
+    //   $scope.all= function (master) {//全选
+    //         if(master==true){
+    //             $scope.x=true;
+    //             alert($scope.ids);
+    //             $scope.choseArr=$scope.ids;
+    //             flag="a";
+    //         }else{
+    //             $scope.x=false;
+    //             $scope.choseArr=[];
+    //         }
+
+            
+
+    //     };
+    // $scope.chk= function (z,x) {//单选或者多选
+    //         if(flag=="a") {//在全选的基础上操作
+    //             str = $scope.choseArr.join(",") + ",";
+    //         }
+    //         if (x == true) {//选中
+    //             str = str + z + ",";
+    //         } else {
+    //             str = str.replace(z + ",", "");//取消选中
+    //         }
+
+    //         $scope.choseArr=(str.substr(0,str.length-1)).split(",");
+
+    //     };
+
+
+    // $scope.delete= function () {// 操作CURD
+
+    //         if($scope.choseArr[0]==""||$scope.choseArr.length==0){//没有选择一个的时候提示
+    //             alert("请至少选中一条数据在操作！")
+    //             return;
+    //         };
+
+    //         for(var i=0;i<$scope.choseArr.length;i++){
+    //             //alert($scope.choseArr[i]);
+    //             console.log($scope.choseArr[i]);//遍历选中的id
+    //         }
+
+
+
+    //     };
+
+
+
+
+
 
 codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
 
@@ -101,13 +162,15 @@ codecheck.controller('ModalDemoCtrl', function ($scope, $uibModal) {
 // Please note that $modalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, Insertkeyservice, getkeyservice) {
-
+// codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, Insertkeyservice, getkeyservice) {
+codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, keyservice) {
 
   $scope.ok = function () {
      var key = $scope.key;
      var content = $scope.content;
-     Insertkeyservice.insertkey(key,content)
+     var data = {'opt': 'insert','key': key,'content' : content};
+     // Insertkeyservice.insertkey(key,content)
+     keyservice.insertkey(data)
      .then(function(data) {
             alert(data.data.result);window.location.reload();
         });

@@ -31,7 +31,7 @@ var codecheck = angular.module('codecheck.services', [])
 
 
 
-codecheck.factory('getkeyservicepost', function($q, $http) {
+codecheck.factory('keyservice', function($q, $http) {
     // var url = "http://192.168.70.131:8888/key/?opt=selectall";
     // var d = $q.defer();
     // var promise = $http.get(url);
@@ -42,7 +42,7 @@ codecheck.factory('getkeyservicepost', function($q, $http) {
     
     
     return {
-        postMfrs: function(data, success, error) {
+        getkeys: function(data, success, error) {
             var promise = $http.post(url, data);
 
             promise.success(function(response) {
@@ -55,7 +55,43 @@ codecheck.factory('getkeyservicepost', function($q, $http) {
             });
 
             return promise
+        },
+
+        insertkey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        deletekey: function(data, success, error){
+
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
         }
+
+
+
     };
 });
 

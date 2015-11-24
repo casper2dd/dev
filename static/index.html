@@ -30,10 +30,9 @@
     <p class="text-success">备注请详细描述</p>
     <p class="text-danger">rm 等危险操作请特别注意</p>
   </div>
-<pre>{{choseArr}}</pre>
-<pre>{{ids}}</pre>
-全选: <input type="checkbox" ng-model="master" ng-click="all(master)">
-<!-- <input type="checkbox" ng-model="master" ng-click="all(master,ids)"> -->
+<!-- 全选: <input type="checkbox" ng-model="master" ng-click="all(master)"> -->
+<!-- 全选: <input type="checkbox" ng-click="selectAll($event)" ng-checked="isSelectedAll()"/> -->
+全选: <input type="checkbox" ng-click="selectAll($event)"/>
   <!-- Table -->
 <div>
   <table class="table table-hover">
@@ -46,11 +45,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="key in keys">
+      <tr ng-repeat="key in keys" ng-class="getSelectedClass(key.id)">
 <th><div class="checkbox">
   <label>
-    <input type="checkbox" id="{{key.id}}" ng-checked="master" ng-click="chk(key.id,x)" ng-model="x">
-    <!-- <input type="checkbox" id="{{key.id}}" ng-true-value="YES" ng-false-value="NO" ng-model="key.id"> -->
+    <!-- <input type="checkbox" id="{{key.id}}" ng-checked="master" ng-click="chk(key.id,x)" ng-model="x"> -->
+    <input type="checkbox" name="selected" ng-checked="isSelected(key.id)" ng-click="updateSelection($event, key.id)"/>
   </label>
 </div></th>
 <td>{{key.key}}</td>
