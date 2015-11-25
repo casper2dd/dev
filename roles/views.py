@@ -122,10 +122,13 @@ def keycheck(request):
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
     elif opt == 'delete':
-        pk = data['pk']
-        DB = keycode.objects.get(pk = pk)
-        DB.delete()
-        re_dict = {'result':'delete ok',
+        pklist = data['pklist']
+        allresult = []
+        for pk in pklist:
+            DB = keycode.objects.get(pk = pk)
+            DB.delete()
+            allresult.append(pk)
+        re_dict = {'result':"delete ok",
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
     elif opt == 'selectall':

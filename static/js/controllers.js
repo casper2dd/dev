@@ -57,20 +57,34 @@ codecheck.controller('getkeys', function($scope, $uibModal,keyservice) {
                 alert("请至少选中一条数据在操作！")
                 return;
             };
-
-            for(var i=0;i<$scope.selected.length;i++){
-                //alert($scope.choseArr[i]);
-                console.log($scope.selected[i]);//遍历选中的id
-                var data = {'opt': 'delete','pk': $scope.selected[i]};
-                keyservice.deletekey(data)
-               .then(function(data) {
-                    alert(data.data.result);window.location.reload();
-               });
+            var r=confirm("确定删除?")
+            if (r === true){
+            var data = {'opt': 'delete','pklist': $scope.selected};
+            keyservice.deletekey(data)
+            .then(function(data) {
+              alert(data.data.result);window.location.reload();
+              });
             }
+            // else{
+  
+            // }
+
+            
+          }
+
+            // for(var i=0;i<$scope.selected.length;i++){
+            //     //alert($scope.choseArr[i]);
+            //     console.log($scope.selected[i]);//遍历选中的id
+            //     var data = {'opt': 'delete','pk': $scope.selected[i]};
+            //     keyservice.deletekey(data)
+            //    .then(function(data) {
+            //         alert(data.data.result);window.location.reload();
+            //    });
+            // }
 
 
 
-        };
+        // };
 
 }); 
 
