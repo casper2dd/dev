@@ -73,9 +73,44 @@ codecheck.factory('keyservice', function($q, $http) {
 
         },
 
+        updatekey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
         deletekey: function(data, success, error){
 
             var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        checkkey: function(data, success, error){
+
+            var checkurl = "http://192.168.70.131:8888/review/"
+
+            var promise = $http.post(checkurl, data);
 
             promise.success(function(response) {
                 //d.resolve(response)

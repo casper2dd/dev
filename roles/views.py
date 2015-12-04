@@ -1,5 +1,6 @@
 from django.shortcuts import render
 import json
+import os
 from django.http import HttpResponse
 # Create your views here.
 from roles.models import roles,keycode
@@ -81,6 +82,39 @@ def format_request(request):
 
 
 @csrf_exempt
+def review(request):
+
+    data = format_request(request)
+    filepath = data['filepath']
+    re_dict = {}
+    if not os.path.exists(filepath):
+        re_dict = {'result':"file not exists",
+                   'code':202}
+    else:
+        keylist = []
+        keydict = {}
+        datalist = keycode.objects.all()
+        for i in datalist:
+            keylist.append(i.key)
+        f = open(filepath,'r')
+        for num,cont in enumerate(f.readlines()):
+            for key in keylist:
+                if key in cont:
+                    keydict[int(num)+1] = cont
+        if keydict:
+            re_dict = {'result':keydict,
+                   'code':200}
+        else:
+            re_dict = {'result':'no find keys',
+                   'code':201}
+    return HttpResponse(json.dumps(re_dict))
+
+
+
+
+
+
+@csrf_exempt
 def keycheck(request):
     data = format_request(request)
     # server_json = request.META
@@ -107,7 +141,7 @@ def keycheck(request):
         key = data['key']
         # ip = request.GET['ip']
         content = data['content']
-        keycode.objects.filter(pk=pk).update(key = key,ip = ip,content = content)
+        keycode.objects.filter(pk=pk).update(key = key,content = content)
         re_dict = {'result':'update ok',
                    'code':200}
         return HttpResponse(json.dumps(re_dict))

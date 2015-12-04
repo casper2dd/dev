@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^roles/$', 'roles.views.index'),
     url(r'^key/$', 'roles.views.keycheck'),
+    url(r'^review/$', 'roles.views.review'),
 ]
