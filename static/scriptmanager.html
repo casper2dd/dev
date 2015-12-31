@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" ng-app="myApp" ng-controller="getkeys">
+  <head>
+    <meta charset="utf-8">
+    <title>脚本管理</title>
+
+    <link rel="stylesheet" href="//apps.bdimg.com/libs/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!-- <link rel="ico" href="static/favicon.ico"> -->
+    <!--
+    <script src="static/semantic/semantic.js">
+    -->
+    <script src="http://apps.bdimg.com/libs/angular.js/1.3.9/angular.min.js"></script> 
+    <script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/services.js"></script>
+       <style type='text/css'>
+      body {
+        background-color: #CCC;
+      }
+    </style>
+  </head>
+  <body>
+<!-- <div class="panel panel-default"> -->
+   <div class="panel-body">
+      脚本管理
+   </div>
+<!-- </div> -->
+<div class="panel panel-default">
+  <div class="panel-heading">查询条件</div>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <label for="filepath">脚本名称:</label>
+    <div class="input-group input-group-sm" style="height:30px;display: inline-block;margin-bottom: 0;vertical-align: middle;">
+      <input type="text" ng-model="filepath" class="form-control" placeholder="请输入脚本名称" id="filepath">
+      </div>
+<!--        <label for="filepath">提交人:</label>
+      <div class="input-group input-group-sm" >
+      <input type="text" ng-model="user" class="form-control" placeholder="请输入创建人账号" id="user">
+       <span class="input-group-btn">
+        <button class="btn btn-default" type="button">我</button>
+      </span>
+      </div> -->
+  </div>
+  <div class="panel-body">
+ <!--     <div class="modal-footer"> -->
+            <button class="btn btn-primary col-sm-1" type="button" ng-click="run()">查询</button>
+      <!--   </div> -->
+  </div>
+</div>
+     <div class="panel-body">
+            <button class="btn btn-info col-sm-1" type="button" ng-click="open()">增加脚本</button>
+        </div>
+
+        <div class="panel-body">
+  <table class="table table-hover table-bordered">
+    <thead>
+      <tr>
+        <th>脚本名称</th>
+        <th>创建人</th>
+ <th>创建时间</th>
+        <th>说明</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="key in keys" ng-class="getSelectedClass(key.id)">
+<th class="row"><!-- <div class="checkbox"> -->
+  <p class="navbar-text">
+python
+  </p>
+<!-- </div> --></th>
+<td><p class="navbar-text">{{key.key}}</p></td>
+<td><p class="navbar-text">{{key.key}}</p></td>
+<td><p class="navbar-text">{{key.content}}</p></td>
+<td>
+<p class="navbar-text">
+<button class="btn btn-success" type="submit">编辑</button>
+<button class="btn btn-warning" type="submit">共享</button>
+<button class="btn btn-danger" type="submit">删除</button>
+</p>
+<!-- <div class="btn-group" role="group" aria-label="...">
+  <button type="button" class="btn btn-default">编辑</button>
+  <button type="button" class="btn btn-default">Middle</button>
+  <button type="button" class="btn btn-default">Right</button>
+</div> -->
+</td>
+<!-- <td><button type="button" class="btn btn-success navbar-btn" ng-click="edit(key.id,key.key,key.content)">编辑</button></td> -->
+</tr>
+    </tbody>
+</table>
+</div>
+</div>
+
+
+
+<div>
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">增加脚本</h3>
+        </div>
+        <div class="modal-body">
+        <table class="table table-hover table-bordered">
+        <thead>
+      <tr>
+        <th>参数名称</th>
+        <th>选项名</th>
+        <th>说明</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+        </table>
+              </div>  
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>

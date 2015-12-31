@@ -67,20 +67,20 @@
     </thead>
     <tbody>
       <tr ng-repeat="key in keys" ng-class="getSelectedClass(key.id)">
-<th><div class="checkbox">
-  <label>
+<th class="row"><!-- <div class="checkbox"> -->
+  <label class="navbar-text">
     <!-- <input type="checkbox" id="{{key.id}}" ng-checked="master" ng-click="chk(key.id,x)" ng-model="x"> -->
     <input type="checkbox" name="selected" ng-checked="isSelected(key.id)" ng-click="updateSelection($event, key.id)"/>
   </label>
-</div></th>
-<td>{{key.key}}</td>
+<!-- </div> --></th>
+<td><p class="navbar-text">{{key.key}}</p></td>
 <!-- <td>
 <div class="col-md-4">
 <select class="form-control" ng-model="opter"><option ng-repeat="f in opters">{{f}}</option></select>
 </div>
  </td> -->
-<td>{{key.content}}</td>
-<td><button type="button" class="btn btn-success" ng-click="edit(key.id,key.key,key.content)">编辑</button></td>
+<td><p class="navbar-text">{{key.content}}</p></td>
+<td><button type="button" class="btn btn-success navbar-btn" ng-click="edit(key.id,key.key,key.content)">编辑</button></td>
 </tr>
     </tbody>
 </table>
