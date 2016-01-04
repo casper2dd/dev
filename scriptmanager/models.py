@@ -5,7 +5,7 @@ class script(models.Model) :
         name = models.CharField(max_length = 100,unique=True)  
         opter = models.CharField(max_length = 50, blank = True) 
         path =  models.CharField(max_length = 200, blank = True)
-        date_time = models.DateTimeField(auto_now_add = True)
+        date_time = models.CharField(max_length = 200)
         content = models.TextField(blank = True, null = True)
         flag = models.CharField(max_length = 50, blank = True)
         class Meta:     

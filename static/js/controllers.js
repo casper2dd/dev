@@ -357,17 +357,37 @@ codecheck.controller('scriptmanager', function($scope, $uibModal,keyservice) {
 }); 
 
 
-codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, keyservice) {
+codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, scriptservice, scriptinfoservice) {
 
   $scope.vartable = [];
-  $scope.addtable = function () {
+  $scope.addvartable = function () {
   $scope.varname='';
-  $scope.itermName='';
-  $scope.cname='';
-  $scope.vartable.push({varname:$scope.varname,itermName:$scope.itermName,cname:$scope.cname});
+  $scope.itermname='';
+  $scope.content='';
+  $scope.vartable.push({varname:$scope.varname,itermname:$scope.itermname,content:$scope.content});
   };
 
+
+
+  $scope.delvartable = function (index) {
+    $scope.vartable.splice(index, 1);
+
+  };
+
+
   $scope.ok = function () {
+
+    var data = {'opt': 'insert','name': 'test','content' : 'test','opter':'liancheng','path':'/test/tmp','flag':'0'};
+    scriptservice.insertkey(data)
+    .then(function(data) {
+            alert(data.data.result);
+            scriptservice.selectkey({'opt':'select','name':'test'})
+            .then(function(data) {
+              alert(data.data.result);
+            });
+        });
+
+
      var key = $scope.key;
      var content = $scope.content;
      var data = {'opt': 'insert','key': key,'content' : content};

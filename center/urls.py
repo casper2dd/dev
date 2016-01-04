@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^roles/$', 'roles.views.index'),
     url(r'^key/$', 'roles.views.keycheck'),
     url(r'^review/$', 'roles.views.review'),
+    url(r'^script/$', 'scriptmanager.views.script_manager'),
+    url(r'^script_info/$', 'scriptmanager.views.script_info_manager'),
 ]

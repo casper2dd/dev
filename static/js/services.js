@@ -152,6 +152,210 @@ codecheck.factory('Insertkeyservice', function($q, $http) {
     };
 });
 
+
+
+
+
+//脚本管理
+
+codecheck.factory('scriptservice', function($q, $http) {
+    // var url = "http://192.168.70.131:8888/key/?opt=selectall";
+    // var d = $q.defer();
+    // var promise = $http.get(url);
+    var url = "http://192.168.70.131:8888/script/"
+    // var header = headers : {
+    //     "x-csrftoken" : $cookies.csrftoken
+    // }
+    
+    
+    return {
+        getkeys: function(data, success, error) {
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+        },
+
+        insertkey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        updatekey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        deletekey: function(data, success, error){
+
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        selectkey: function(data, success, error){
+
+
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        }
+
+
+
+    };
+});
+
+codecheck.factory('scriptinfoservice', function($q, $http) {
+    // var url = "http://192.168.70.131:8888/key/?opt=selectall";
+    // var d = $q.defer();
+    // var promise = $http.get(url);
+    var url = "http://192.168.70.131:8888/script_info/"
+    // var header = headers : {
+    //     "x-csrftoken" : $cookies.csrftoken
+    // }
+    
+    
+    return {
+        getkeys: function(data, success, error) {
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+        },
+
+        insertkey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        updatekey: function(data, success, error){
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        deletekey: function(data, success, error){
+
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
+        selectkey: function(data, success, error){
+
+            var checkurl = "http://192.168.70.131:8888/review/"
+
+            var promise = $http.post(checkurl, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        }
+
+
+
+    };
+});
+
+
 // //cmdb.factory('GetServersSerivice', [function($q, $http){
 // //    var service = {
 // //        getServers: function() {

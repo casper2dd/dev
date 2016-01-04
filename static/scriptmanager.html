@@ -100,19 +100,35 @@ python
             <h3 class="modal-title">增加脚本</h3>
         </div>
         <div class="modal-body">
+        <div class="form-group">
+            <label for="inputfile" class="col-sm-2 control-label">增加脚本</label>
+            <div class="col-sm-4">
+              <button id="inputfile" type="button" class="btn btn-info btn-flat" ngf-select ng-model="f.src">选择文件</button><p></p><span class="label label-success">{{ f.src[0].name }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
         <table class="table table-hover table-bordered">
         <thead>
       <tr>
         <th>参数名称</th>
         <th>选项名</th>
         <th>说明</th>
+
       </tr>
     </thead>
     <tbody>
+    <tr ng-repeat="add in vartable track by $index">
+    <td><div class="input-group input-group-sm"><input type="text" ng-model="add.varname" class="form-control" placeholder="请输入参数名称" > </div></td>
+    <td><div class="input-group input-group-sm"><input type="text" ng-model="add.itermname" class="form-control" placeholder="请输入选项名" > </div></td>
+    <td><div class="input-group input-group-sm"><input type="text" ng-model="add.content" class="form-control" placeholder="说明" > </div></td>
+    <td><button type="button" class="close" aria-label="Close" ng-click="delvartable($index)"><span aria-hidden="true">&times;</span></button></td>
+    </tr>
     </tbody>
         </table>
               </div>  
         <div class="modal-footer">
+            <button class="btn btn-info" type="button" ng-click="addvartable()">增加参数</button>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>

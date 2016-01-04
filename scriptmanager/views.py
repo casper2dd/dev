@@ -6,6 +6,7 @@ from scriptmanager.models import script,script_info
 from django.core.context_processors import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.csrf import csrf_protect
+import time
 # Create your views here.
 
 @csrf_exempt
@@ -43,7 +44,8 @@ def script_manager(request):
         path = data['path']
         content = data['content']
         flag = data['flag']
-        script.objects.create(name = name,opter = opter,path = path,content = content,flag = flag)
+        date_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        script.objects.create(name = name,opter = opter,path = path,content = content,flag = flag,date_time = date_time)
         re_dict = {'result':'insert ok',
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
@@ -68,6 +70,20 @@ def script_manager(request):
             result['date_time'] = i.date_time
             allresult.append(result)
         re_dict = {'result':allresult,
+                   'code':200}
+        return HttpResponse(json.dumps(re_dict))
+    elif opt == 'select':
+        name = data['name']
+        DB = script.objects.get(name = name)
+        result = {}
+        result['id'] = DB.id
+        result['name'] = DB.name
+        result['opter'] = DB.opter
+        result['path'] = DB.path
+        result['content'] = DB.content
+        result['flag'] = DB.flag
+        result['date_time'] = DB.date_time
+        re_dict = {'result':result,
                    'code':200}
         return HttpResponse(json.dumps(re_dict))
 
