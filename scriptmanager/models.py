@@ -18,9 +18,9 @@ class script(models.Model) :
 class script_info(models.Model) :
         script = models.ForeignKey(script)
         var_name = models.CharField(max_length = 100, blank = True)  
-        iterm_Name = models.CharField(max_length = 200, blank = True)  
+        iterm_name = models.CharField(max_length = 200, blank = True)  
         content = models.TextField(blank = True, null = True)
         class Meta:     
             db_table = 'script_info'
         def __unicode__(self) :
-            return ('%s %s %s %s %s\n') % (self.id,self.script,self.var_name,self.iterm_Name,self.content)
+            return ('%s %s %s %s %s\n') % (self.id,self.script,self.var_name,self.iterm_name,self.content)

@@ -233,6 +233,23 @@ codecheck.factory('scriptservice', function($q, $http) {
 
         },
 
+        updateshare: function(data, success, error){
+
+            var promise = $http.post(url, data);
+
+            promise.success(function(response) {
+                //d.resolve(response)
+
+            });
+
+            promise.error(function(response, status) {
+                //
+            });
+
+            return promise
+
+        },
+
         selectkey: function(data, success, error){
 
 

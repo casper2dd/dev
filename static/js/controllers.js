@@ -211,18 +211,57 @@ codecheck.controller('editCtrl', function ($scope, $uibModalInstance, keyservice
 
 
 //脚本管理控制器
-codecheck.controller('scriptmanager', function($scope, $uibModal,keyservice) {
+codecheck.controller('scriptmanager', function($scope, $uibModal,scriptservice) {
   var data = {'opt': "selectall"};
+  
+  $scope.shareobj = {};
+  scriptservice.getkeys(data)
+  .then(function(data) {
+   $scope.scripts = data.data.result;
+   for (var i = 0; i < $scope.scripts.length; i++) {
+    flag = $scope.scripts[i].flag;
+    if (flag==='0'){
+      $scope.shareobj[$scope.scripts[i]['id']]={'shareprompt':'取消共享','num':Number(flag)};
+      // var share={'id':$scope.scripts[i]['id'],'shareprompt':'取消共享','num':Number(flag)};
+      // $scope.sharelist.push(share);
+    }
+    else{
+      $scope.shareobj[$scope.scripts[i]['id']]={'shareprompt':'共享','num':Number(flag)};
+      // var share={'id':$scope.scripts[i]['id'],'shareprompt':'共享','num':Number(flag)};
+      // $scope.sharelist.push(share);
+    }
+  };
+  console.log($scope.shareobj)
+  });
 
-  $scope.alertshow = false;
+  $scope.updateshare = function (id,flag) {
 
-  $scope.opters = ['lianhceng','liancheng2','liancheng3']
 
-    keyservice.getkeys(data)
-        .then(function(data) {
-             
-             $scope.keys = data.data.result;
-        });
+
+   var r=confirm("确定更改共享状态?")
+   if (r === true){
+   var data = {'opt':'updateshare','pk':id,'flag':flag}
+   scriptservice.updateshare(data)
+   .then(function(data) {
+    alert(data.data.result);window.location.reload();
+   }); 
+  }
+  };
+
+
+  $scope.delete = function (id) {// 操作CURD
+
+            var r=confirm("确定删除?")
+            if (r === true){
+            var data = {'opt': 'delete','pk': id};
+            scriptservice.deletekey(data)
+            .then(function(data) {
+              alert(data.data.result);window.location.reload();
+              });
+            }
+          };
+
+    
 
     $scope.animationsEnabled = true;
     $scope.open = function (size) {
@@ -230,16 +269,16 @@ codecheck.controller('scriptmanager', function($scope, $uibModal,keyservice) {
     var modalInstance = $uibModal.open({
       animation: $scope.animationsEnabled,
       templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
+      controller: 'scriptModalInstanceCtrl',
       size: size
     });
     };
 
 
-    $scope.edit = function (id,key,content,size) {
+    $scope.edit = function (id,content,flag,size) {
     var editdict = {
       'eid':id,
-      'ekey':key,
+      'eflag':flag,
       'econtent':content
     };
 
@@ -285,26 +324,6 @@ codecheck.controller('scriptmanager', function($scope, $uibModal,keyservice) {
     $scope.isSelected = function (id) {
         return $scope.selected.indexOf(id) >= 0;
     };
-
-    $scope.delete = function () {// 操作CURD
-
-            if($scope.selected[0]==""||$scope.selected.length==0){//没有选择一个的时候提示
-                alert("请至少选中一条数据在操作！")
-                return;
-            };
-            var r=confirm("确定删除?")
-            if (r === true){
-            var data = {'opt': 'delete','pklist': $scope.selected};
-            keyservice.deletekey(data)
-            .then(function(data) {
-              alert(data.data.result);window.location.reload();
-              });
-            }
-
-
-            
-          };
-
 
         $scope.run = function() {
 
@@ -354,10 +373,12 @@ codecheck.controller('scriptmanager', function($scope, $uibModal,keyservice) {
 
 
 
-}); 
+});
 
 
-codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, scriptservice, scriptinfoservice) {
+codecheck.controller('scriptModalInstanceCtrl', function ($scope, $uibModalInstance, scriptservice, scriptinfoservice,Upload) {
+
+  $scope.flag = 0;
 
   $scope.vartable = [];
   $scope.addvartable = function () {
@@ -374,34 +395,117 @@ codecheck.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, s
 
   };
 
+  $scope.upload = function (file) {
+    $scope.uploadstart = true;
+    console.log($scope.scriptname);
+        Upload.upload({
+            url: 'http://192.168.70.131:8888/upload/',
+            method: 'POST',
+            file: file,
+        }).then(function (resp) {
+            alert(resp.data);
+            console.log(resp.data);
+            console.log('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data);
+        }, function (resp) {
+            console.log('Error status: ' + resp.status);
+        }, function (evt) {
+            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            $scope.progress = progressPercentage;
+            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
+        });
+    };
 
   $scope.ok = function () {
+    if ($scope.scriptname == undefined) { alert('请选择文件!');return; }
+    $scope.upload($scope.scriptname);
 
-    var data = {'opt': 'insert','name': 'test','content' : 'test','opter':'liancheng','path':'/test/tmp','flag':'0'};
+    var data = {'opt': 'insert','name': $scope.scriptname[0].name,'content' : $scope.scriptcontent,'opter':'liancheng','flag':$scope.flag};//flag 0:share 1:noshare
     scriptservice.insertkey(data)
     .then(function(data) {
-            alert(data.data.result);
-            scriptservice.selectkey({'opt':'select','name':'test'})
-            .then(function(data) {
-              alert(data.data.result);
-            });
+            
+            // console.log($scope.vartable)
+            // scriptservice.selectkey({'opt':'select','name':'test'})
+            // .then(function(data) {
+            //   result = data.data.result;
+            //   id = result['id'];
+            //   var data = {'id':id,'vartable':$scope.vartable};
+            //   scriptinfoservice.insertkey(data)
+            //   .then(function(data) {
+            //   alert(data.data.result);
+            //     });
+            // });
+        var data = {'opt':'insert','name':$scope.scriptname[0].name,'vartable':$scope.vartable};
+              scriptinfoservice.insertkey(data)
+              .then(function(data) {
+                alert(data.data.result);window.location.reload();
+                 });
+
         });
-
-
-     var key = $scope.key;
-     var content = $scope.content;
-     var data = {'opt': 'insert','key': key,'content' : content};
-
-     keyservice.insertkey(data)
-     .then(function(data) {
-            alert(data.data.result);window.location.reload();
-        });
-
 
      $uibModalInstance.close();
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.liancheng = function () {
+    console.log($scope.flag);
+  };
+});
+
+
+
+
+codecheck.controller('editCtrl', function ($scope, $uibModalInstance, scriptservice,pk,scriptinfoservice) {
+
+  $scope.econtent = pk.econtent;
+  $scope.eflag = Number(pk.eflag);
+  console.log($scope.eflag);
+  var pk = pk.eid;
+  var data = {'opt': 'selectinfo','pk': pk};
+  scriptservice.getkeys(data)
+  .then(function(data) {
+         
+         $scope.infotable = data.data.result;
+  });
+
+  $scope.delinfotable = function (index) {
+    $scope.infotable.splice(index, 1);
+
+  };
+
+  $scope.addinfotable = function () {
+  $scope.varname='';
+  $scope.itermname='';
+  $scope.content='';
+  $scope.infotable.push({varname:$scope.varname,itermname:$scope.itermname,content:$scope.content});
+  };
+
+
+  $scope.ok = function () {
+     var flag = $scope.eflag;
+     var content = $scope.econtent;
+     // var id = $scope.eid;
+     var data = {'opt': 'update','pk': pk,'content' : content,'flag' : flag};
+     // Insertkeyservice.insertkey(key,content)
+     scriptservice.updatekey(data)
+     .then(function(data) {
+            var data = {'opt':'update','pk': pk,'infotable':$scope.infotable};
+              scriptinfoservice.updatekey(data)
+              .then(function(data) {
+                alert(data.data.result);window.location.reload();
+                 });
+        });
+
+     $uibModalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+  $scope.liancheng = function () {
+    console.log($scope.flag);
   };
 });

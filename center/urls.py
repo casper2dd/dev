@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^review/$', 'roles.views.review'),
     url(r'^script/$', 'scriptmanager.views.script_manager'),
     url(r'^script_info/$', 'scriptmanager.views.script_info_manager'),
+    url(r'^upload/$', 'scriptmanager.views.upload_script'),
+    
 ]

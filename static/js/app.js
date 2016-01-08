@@ -14,4 +14,4 @@
 //});
 
 
-var codecheck = angular.module('myApp', ['codecheck.services','ui.bootstrap'])
+var codecheck = angular.module('myApp', ['codecheck.services','ui.bootstrap','ngFileUpload'])
