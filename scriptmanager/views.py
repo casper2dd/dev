@@ -9,6 +9,8 @@ from django.views.decorators.csrf import csrf_protect
 import time
 # Create your views here.
 
+path = '/tmp/'
+
 @csrf_exempt
 def format_request(request):
 
@@ -21,6 +23,113 @@ def format_request(request):
     else:
         postjson = request.POST
     return postjson
+
+@csrf_exempt
+def script_manager_update(request):
+    data = format_request(request)
+    pk = data['pk']
+    content = data['content']
+    flag = data['flag']
+    script.objects.filter(pk=pk).update(content = content,flag = flag)
+    re_dict = {'result':'update ok',
+                   'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+@csrf_exempt
+def script_manager_insert(request):
+    data = format_request(request)
+    name = data['name']
+    opter = data['opter']
+    content = data['content']
+    flag = data['flag']
+    date_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    script.objects.create(name = name,opter = opter,path = path,content = content,flag = flag,date_time = date_time)
+    re_dict = {'result':'insert ok',
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+@csrf_exempt
+def script_manager_delete(request):
+    data = format_request(request)
+    pk = data['pk']
+    DB = script.objects.get(pk = pk)
+    filename = DB.name
+    filepath = DB.path
+    file = os.path.join(filepath,filename)
+    DB.delete()
+    if os.path.exists(file):
+        os.remove(file)
+    re_dict = {'result':"delete ok",
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+
+@csrf_exempt
+def script_manager_updateshare(request):
+    data = format_request(request)
+    pk = data['pk']
+    flag = data['flag']
+    script.objects.filter(pk=pk).update(flag = flag)
+    re_dict = {'result':'update flag ok'+str(flag),
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+@csrf_exempt
+def script_manager_selectall(request):
+    data = format_request(request)
+    list = script.objects.all()
+    allresult = []
+    for i in list:
+        result = {}
+        result['id'] = i.id
+        result['name'] = i.name
+        result['opter'] = i.opter
+        result['path'] = i.path
+        result['content'] = i.content
+        result['flag'] = i.flag
+        result['date_time'] = i.date_time
+        allresult.append(result)
+    re_dict = {'result':allresult,
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+
+@csrf_exempt
+def script_manager_select(request):
+    data = format_request(request)
+    name = data['name']
+    DB = script.objects.get(name = name)
+    result = {}
+    result['id'] = DB.id
+    result['name'] = DB.name
+    result['opter'] = DB.opter
+    result['path'] = DB.path
+    result['content'] = DB.content
+    result['flag'] = DB.flag
+    result['date_time'] = DB.date_time
+    re_dict = {'result':result,
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+@csrf_exempt
+def script_manager_selectinfo(request):
+    data = format_request(request)
+    pk = data['pk']
+    DB = script.objects.get(pk = pk)
+    list = script_info.objects.filter(script = DB)
+    allresult = []
+    for i in list:
+        result = {}
+        result['id'] = i.id
+        # result['script'] = i.script
+        result['varname'] = i.var_name
+        result['itermname'] = i.iterm_name
+        result['content'] = i.content
+        allresult.append(result)
+    re_dict = {'result':allresult,
+               'code':200}
+    print re_dict
+    return HttpResponse(json.dumps(re_dict))
 
 
 @csrf_exempt
@@ -122,6 +231,55 @@ def scriptname2id(name):
     p = script.objects.get(name=name)
     return p.id
 
+
+@csrf_exempt
+def script_info_manager_update(request):
+    data = format_request(request)
+    pk =  data['pk']
+    info = data['infotable']
+    DB = script.objects.get(pk = pk)
+    script_info.objects.filter(script = DB).delete()
+    for i in info:
+        var_name = i['varname']
+        iterm_name = i['itermname']
+        content = i['content']
+        script_info.objects.create(script = DB,var_name = var_name,iterm_name = iterm_name,content = content)
+    re_dict = {'result':'update ok',
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+
+@csrf_exempt
+def script_info_manager_insert(request):
+    data = format_request(request)
+    sname = data['name']
+    info = data['vartable']
+    DB = script.objects.get(name = sname)
+    for i in info:
+        var_name = i['varname']
+        iterm_name = i['itermname']
+        content = i['content']
+        script_info.objects.create(script = DB,var_name = var_name,iterm_name = iterm_name,content = content)
+    re_dict = {'result':'insert ok',
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
+
+@csrf_exempt
+def script_info_manager_selectall(request):
+    data = format_request(request)
+    list = script_info.objects.all()
+    allresult = []
+    for i in list:
+        result = {}
+        result['id'] = i.id
+        result['script'] = i.script
+        result['varname'] = i.var_name
+        result['itermname'] = i.iterm_name
+        result['content'] = i.content
+        allresult.append(result)
+    re_dict = {'result':allresult,
+               'code':200}
+    return HttpResponse(json.dumps(re_dict))
 
 @csrf_exempt
 def script_info_manager(request):
